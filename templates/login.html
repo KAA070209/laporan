@@ -119,6 +119,29 @@
       box-shadow: 0 15px 35px rgba(0, 114, 255, 0.5);
     }
 
+    /* 🔗 Tombol ke laporan publik */
+    .public-link {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      margin-bottom: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .public-link:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: scale(1.04);
+    }
+
     /* 🔔 Flash messages */
     .flash {
       padding: 10px;
@@ -187,6 +210,9 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
+
+    <!-- 🔗 Tombol ke halaman publik -->
+    <a href="{{ url_for('laporan_publik') }}" class="public-link">📊 Lihat Laporan Publik</a>
 
     <!-- ✅ Login Form -->
     <form action="/login" method="POST" autocomplete="off">

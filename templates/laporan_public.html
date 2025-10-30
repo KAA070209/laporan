@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Laporan Keuangan — Posyandu Anggrek 14 RW 14</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+    :root{
+      --bg-1:#0f172a;
+      --grad-a:#05a3a2;
+      --grad-b:#2563eb;
+      --accent:#ff7a59;
+      --muted:#94a3b8;
+      --card-bg:rgba(255,255,255,0.06);
+      --card-blur:10px;
+      --glass-border:rgba(255,255,255,0.06);
+      --radius-lg:16px;
+      --shadow-1:0 8px 30px rgba(2,6,23,0.6);
+      --transition:360ms cubic-bezier(.2,.9,.2,1);
+      color-scheme:dark;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Inter",system-ui,Roboto;
+      background:radial-gradient(1200px 600px at 10% 10%,rgba(5,163,162,0.12),transparent 8%),
+                 radial-gradient(1000px 500px at 90% 90%,rgba(37,99,235,0.12),transparent 6%),
+                 linear-gradient(180deg,var(--bg-1),#061026 70%);
+      color:#e6eef8;
+      min-height:100vh;
+      padding:36px;
+      -webkit-font-smoothing:antialiased;
+    }
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      background:linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+      background-size:60px 60px;
+      mix-blend-mode:overlay;opacity:.5;
+      animation:bgShift 12s linear infinite;
+    }
+    @keyframes bgShift{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+
+    header{
+      max-width:1200px;margin:0 auto 30px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    }
+    .logo{
+      width:56px;height:56px;border-radius:12px;
+      background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+      display:grid;place-items:center;
+      font-weight:700;font-size:20px;color:white;
+      box-shadow:0 8px 30px rgba(37,99,235,0.18);
+    }
+    h1{font-size:1.3rem;margin:0;color:#f1f8ff}
+    .sub{color:var(--muted);font-size:.9rem}
+
+    main{max-width:1200px;margin:auto;display:flex;flex-direction:column;gap:20px}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));
+      border:1px solid var(--glass-border);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow-1);
+      backdrop-filter:blur(var(--card-blur));
+      padding:18px;
+      transition:transform var(--transition);
+    }
+    .card:hover{transform:translateY(-6px)}
+
+    .summary{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    }
+    .stat{
+      padding:16px;border-radius:12px;
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.04);
+      display:flex;flex-direction:column;gap:6px;
+    }
+    .label{font-size:.85rem;color:var(--muted)}
+    .amount{font-size:1.45rem;font-weight:800;color:white}
+    .mini{font-size:.78rem;color:var(--muted)}
+
+    .table-header{
+      display:flex;justify-content:space-between;align-items:center;
+      flex-wrap:wrap;gap:10px;margin-bottom:10px;
+    }
+    .search{
+      display:flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.02);
+      padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+    }
+    .search input{
+      background:transparent;border:none;outline:none;color:#dbeafe;font-size:.95rem;width:200px;
+    }
+
+    table{width:100%;border-collapse:collapse;min-width:800px}
+    thead th{
+      background:rgba(8,12,20,0.6);
+      color:#f1f8ff;font-size:.78rem;padding:10px;text-align:center;
+    }
+    tbody td{
+      padding:10px;text-align:center;font-size:.9rem;color:#dbeafe;
+      border-bottom:1px dashed rgba(255,255,255,0.04);
+    }
+    tbody tr:nth-child(even){background:rgba(255,255,255,0.02)}
+    tbody tr:hover{background:rgba(37,99,235,0.05)}
+
+    .print-btn{
+      background:linear-gradient(90deg,var(--accent),#ff9a74);
+      color:#061026;padding:10px 14px;border:none;border-radius:10px;
+      font-weight:700;cursor:pointer;
+    }
+
+    .ttd-section{
+      margin-top:20px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap;
+    }
+    .ttd{text-align:center;color:var(--muted);font-size:.9rem}
+    .ttd img{width:110px;border-radius:8px;margin-bottom:8px}
+
+    @media(max-width:768px){
+      body{padding:20px}
+      .summary{grid-template-columns:1fr}
+      table{min-width:auto;font-size:.85rem}
+      .search input{width:100%}
+    }
+
+    @media print{
+      body{background:#fff;color:#000}
+      header,.print-btn,.search{display:none}
+      .card{box-shadow:none;background:transparent}
+      thead th{background:#eee;color:#000}
+      td{color:#000}
+    }
+
+    .fade-in-up{opacity:0;transform:translateY(6px);animation:fadeUp .6s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+
+<body>
+  <header class="fade-in-up">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="logo">A14</div>
+      <div>
+        <h1>Laporan Keuangan — Posyandu Anggrek 14 RW 14</h1>
+        <div class="sub">Desa Pangauban, Kec. Batujajar</div>
+      </div>
+    </div>
+    <div class="sub" style="color:var(--muted)">Status: <strong style="color:#c7f8f6;margin-left:6px;">Publik</strong></div>
+  </header>
+
+  <main>
+    <section class="card fade-in-up">
+      <div class="summary">
+        <div class="stat">
+          <div class="label">Total Masuk</div>
+          <div class="amount" id="totalMasuk">Rp {{ "{:,.0f}".format(total_masuk) }}</div>
+          <div class="mini">Jumlah seluruh pemasukan</div>
+        </div>
+        <div class="stat">
+          <div class="label">Total Keluar</div>
+          <div class="amount" id="totalKeluar">Rp {{ "{:,.0f}".format(total_keluar) }}</div>
+          <div class="mini">Jumlah seluruh pengeluaran</div>
+        </div>
+        <div class="stat">
+          <div class="label">Saldo Akhir</div>
+          <div class="amount" id="saldoAkhir">Rp {{ "{:,.0f}".format(saldo_akhir) }}</div>
+          <div class="mini">Saldo akhir periode</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card fade-in-up">
+      <div class="table-header">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:0.9"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="search" placeholder="Cari tanggal / keterangan...">
+        </div>
+        <button class="print-btn" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+      </div>
+
+      <div style="overflow:auto;border-radius:10px;">
+        <table id="laporanTable">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Tanggal</th>
+              <th style="text-align:left">Keterangan</th>
+              <th>Masuk</th>
+              <th>Keluar</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ row.tanggal.strftime('%d %B %Y') }}</td>
+              <td style="text-align:left">{{ row.keterangan }}</td>
+              <td>{{ "{:,.0f}".format(row.masuk) if row.masuk else "" }}</td>
+              <td>{{ "{:,.0f}".format(row.keluar) if row.keluar else "" }}</td>
+              <td><strong>{{ "{:,.0f}".format(row.saldo) }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;flex-wrap:wrap;">
+        <div id="rowsCount">Menampilkan {{ data|length }} baris</div>
+        <div>Terakhir diperbarui: {{ datetime.utcnow().strftime('%d %B %Y %H:%M') }}</div>
+      </div>
+
+      <div class="ttd-section">
+        <div class="ttd">
+          <p>Ketua Posyandu</p>
+          <img src="/static/img/ketua_posyandu.jpeg" alt="ketua posyandu">
+          <h4 style="color:#f1f8ff;margin:8px 0 0">Nia Suciyati</h4>
+        </div>
+        <div class="ttd">
+          <p>Mengetahui</p>
+          <p>Ketua PKK RW 14</p>
+          <img src="/static/img/ketua_pkk.jpeg" alt="ketua pkk">
+          <h4 style="color:#f1f8ff;margin:8px 0 0">Yati Yuliawati</h4>
+        </div>
+        <div class="ttd">
+          <p>Bendahara</p>
+          <img src="/static/img/bendahara.jpeg" alt="bendahara">
+          <h4 style="color:#f1f8ff;margin:8px 0 0">Ani Hanifah</h4>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("search").addEventListener("input", function(e){
+      const q = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll("#laporanTable tbody tr");
+      let visible = 0;
+      rows.forEach(r=>{
+        const match = r.innerText.toLowerCase().includes(q);
+        r.style.display = match ? "" : "none";
+        if(match) visible++;
+      });
+      document.getElementById("rowsCount").textContent = `Menampilkan ${visible} baris`;
+    });
+  </script>
+</body>
+</html>

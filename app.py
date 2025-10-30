@@ -7,7 +7,7 @@ from config import Config
 app = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 
-# ================= KONEKSI DATABASE ==aaaaaaaaaaaaaaaaaaaaaaaa===============
+# ================= KONEKSI DATABASE =================
 def get_db_connection():
     return mysql.connector.connect(**Config.get_db_config())
 
@@ -41,7 +41,7 @@ def logout():
     flash('Anda telah logout.', 'info')
     return redirect(url_for('login'))
 
-# ================= HALAMAN UTAMA =================
+# ================= HALAMAN ADMIN =================
 @app.route('/')
 def index():
     if 'username' not in session:
@@ -131,6 +131,36 @@ def delete(id):
 
     flash('Data berhasil dihapus.', 'success')
     return jsonify({'status': 'success', 'message': 'Data berhasil dihapus'})
+
+# ================= HALAMAN PUBLIK (READ ONLY) =================
+@app.route('/laporan')
+def laporan_publik():
+    """Halaman publik laporan keuangan (tanpa login)."""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM keuangan ORDER BY tanggal ASC")
+    data = cursor.fetchall()
+
+    cursor.execute("SELECT SUM(masuk) AS total_masuk, SUM(keluar) AS total_keluar FROM keuangan")
+    totals = cursor.fetchone()
+    total_masuk = totals['total_masuk'] or 0
+    total_keluar = totals['total_keluar'] or 0
+
+    cursor.execute("SELECT saldo FROM keuangan ORDER BY id DESC LIMIT 1")
+    last_row = cursor.fetchone()
+    saldo_akhir = last_row['saldo'] if last_row else 0
+
+    conn.close()
+
+    return render_template(
+        'laporan_public.html',
+        data=data,
+        total_masuk=total_masuk,
+        total_keluar=total_keluar,
+        saldo_akhir=saldo_akhir,
+        datetime=datetime
+    )
 
 # ================= RUN =================
 if __name__ == '__main__':
