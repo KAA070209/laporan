@@ -1,12 +1,13 @@
-from flask import Flask, request, jsonify, session, redirect, url_for, render_template
+from flask import Flask, request, jsonify, session, redirect, url_for, render_template, flash
 import mysql.connector
+from werkzeug.security import check_password_hash
 from datetime import datetime
-from config import Config  # import konfigurasi dari file config.py
+from config import Config
 
 app = Flask(__name__)
-app.secret_key = Config.SECRET_KEY  # ambil secret key dari config
+app.secret_key = Config.SECRET_KEY
 
-# Ambil konfigurasi database dari config.py
+# ================= KONEKSI DATABASE ==aaaaaaaaaaaaaaaaaaaaaaaa===============
 def get_db_connection():
     return mysql.connector.connect(**Config.get_db_config())
 
@@ -14,42 +15,50 @@ def get_db_connection():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username') or request.json.get('username')
-        password = request.form.get('password') or request.json.get('password')
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        # Login sederhana (contoh statis)
-        if username == 'admin' and password == '123':
-            session['username'] = username
-            return jsonify({'status': 'success', 'message': 'Login berhasil'})
-        return jsonify({'status': 'error', 'message': 'Username atau password salah'})
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user and check_password_hash(user['password'], password):
+            session['username'] = user['username']
+            flash('Login berhasil! Selamat datang, ' + user['username'], 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Username atau password salah!', 'error')
+            return redirect(url_for('login'))
+
     return render_template('login.html')
 
 # ================= LOGOUT =================
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    flash('Anda telah logout.', 'info')
     return redirect(url_for('login'))
 
 # ================= HALAMAN UTAMA =================
 @app.route('/')
 def index():
     if 'username' not in session:
+        flash('Silakan login terlebih dahulu.', 'warning')
         return redirect(url_for('login'))
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Ambil semua data urut dari awal input
     cursor.execute("SELECT * FROM keuangan ORDER BY tanggal ASC")
     data = cursor.fetchall()
 
-    # Hitung total masuk & keluar
     cursor.execute("SELECT SUM(masuk) AS total_masuk, SUM(keluar) AS total_keluar FROM keuangan")
     totals = cursor.fetchone()
     total_masuk = totals['total_masuk'] or 0
     total_keluar = totals['total_keluar'] or 0
 
-    # Ambil saldo terakhir
     cursor.execute("SELECT saldo FROM keuangan ORDER BY id DESC LIMIT 1")
     last_row = cursor.fetchone()
     saldo_akhir = last_row['saldo'] if last_row else 0
@@ -68,6 +77,7 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_data():
     if 'username' not in session:
+        flash('Anda harus login terlebih dahulu!', 'error')
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
 
     data = request.get_json()
@@ -79,7 +89,6 @@ def add_data():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Ambil saldo terakhir
     cursor.execute("SELECT saldo FROM keuangan ORDER BY id DESC LIMIT 1")
     last_row = cursor.fetchone()
     saldo_terakhir = last_row['saldo'] if last_row else 0
@@ -93,6 +102,7 @@ def add_data():
     new_id = cursor.lastrowid
     conn.close()
 
+    flash('Data berhasil ditambahkan.', 'success')
     return jsonify({
         'status': 'success',
         'message': 'Data berhasil ditambahkan',
@@ -110,6 +120,7 @@ def add_data():
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
     if 'username' not in session:
+        flash('Anda harus login untuk menghapus data.', 'error')
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
 
     conn = get_db_connection()
@@ -118,8 +129,9 @@ def delete(id):
     conn.commit()
     conn.close()
 
+    flash('Data berhasil dihapus.', 'success')
     return jsonify({'status': 'success', 'message': 'Data berhasil dihapus'})
 
-# ================= RUN APP =================
+# ================= RUN =================
 if __name__ == '__main__':
     app.run(debug=True)

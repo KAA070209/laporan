@@ -1,10 +1,9 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    """
-    Konfigurasi utama aplikasi Flask.
-    Dapat membaca dari environment variable atau fallback ke default value.
-    """
 
     # Secret key untuk session Flask
     SECRET_KEY = os.environ.get("SECRET_KEY", "posyandu_anggrek14_secret")
