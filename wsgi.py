@@ -1,12 +1,12 @@
-import sys
 import os
+import sys
 from dotenv import load_dotenv
 
-# Pastikan path ke project sudah benar
-BASE_DIR=0, os.path.dirname(__file__)
-sys.path.insert(0, BASE_DIR)
+# Pastikan path proyek bisa diimpor
+sys.path.insert(0, os.path.dirname(__file__))
 
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+# Muat file .env
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
-from app import app as application  # Flask akan baca dari app.py
-
+# Import Flask app dari file app.py
+from app import app as application

@@ -127,34 +127,26 @@
     }
 
     /* ====== TANDA TANGAN FULL WIDTH ====== */
-.ttd-section{
-  margin-top:22px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.ttd{
-  flex: 1 1 33%;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.ttd img{
-  width: 120px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 8px 30px rgba(2,6,23,0.5));
-}
-
+    .ttd-section{
+      margin-top:22px;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .ttd{
+      flex:1 1 220px;
+      text-align:center;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    .ttd img{
+      width:120px;
+      border-radius:8px;
+      margin-bottom:8px;
+      filter: drop-shadow(0 8px 30px rgba(2,6,23,0.5));
+    }
 
 
 
@@ -168,6 +160,7 @@
 /* HP */
 @media(max-width:480px){
   body{padding:14px;}
+  
   .table-wrap{
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;

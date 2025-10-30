@@ -9,10 +9,10 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "posyandu_anggrek14_secret")
 
     # Konfigurasi Database MySQL
-    DB_HOST = os.environ.get("DB_HOST", "localhost")
-    DB_USER = os.environ.get("DB_USER", "root")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
-    DB_NAME = os.environ.get("DB_NAME", "db_posyandu")
+    DB_HOST = os.environ.get("DB_HOST", "sgp.domcloud.co")
+    DB_USER = os.environ.get("DB_USER", "laporan")
+    DB_PASSWORD = os.environ.get("DB_PASSWORD", "kG-_CbsF_7Tw689Ou2")
+    DB_NAME = os.environ.get("DB_NAME", "laporan_db")
 
     @staticmethod
     def get_db_config():
